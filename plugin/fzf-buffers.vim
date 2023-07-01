@@ -7,7 +7,7 @@ var config = {
   'command': [
     'fzf',
     '--no-multi',
-    '--preview-window=border-left:+{3}-/2',
+    '--preview-window=border-left:+{4}-/2',
     '--ansi',
     '--delimiter=\t',
     '--tabstop=1',
@@ -119,6 +119,6 @@ def FzfBF(): void
   endtry
 enddef
 
-command FzfBF FzfBF()
+command FzfBFD FzfBF()
 
 # vim: set textwidth=80 colorcolumn=80:
