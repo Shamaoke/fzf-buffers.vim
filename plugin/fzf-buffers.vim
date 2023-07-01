@@ -72,7 +72,7 @@ enddef
 def ExtendPopupOptions(options: dict<any>): dict<any>
    return options->extendnew(
             { minwidth:  (&columns * 0.8)->ceil()->float2nr(),
-              minheight: (&lines * 0.9)->ceil() ->float2nr() })
+              minheight: (&lines * 0.8)->ceil() ->float2nr() })
 enddef
 
 def Format(key: number, value: any): string
