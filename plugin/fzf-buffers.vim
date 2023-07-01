@@ -28,8 +28,15 @@ var config = {
 }
 
 def ExtendCommandOptions(options: list<string>): list<string>
-  return options->extendnew(
-    [ (bufname() != '' ? '--preview=bat --color=always --style=numbers --highlight-line={4} {3}' : $'--preview=bat --color=always --style=numbers --highlight-line={{4}} <(echo ''{bufnr()->getbufline(1, "$")->join("\n")}'')') ])
+  var PreviewEmpty = () => 'echo ""'
+
+  var PreviewNonEmpty = () => 'bat --color=always --style=numbers --highlight-line={4} {3}'
+
+  var new_options = [
+    $'--preview=[[ {{3}} =~ ''\[No Name\]'' ]] && {PreviewEmpty()} || {PreviewNonEmpty()}'
+  ]
+
+  return options->extendnew(new_options)
 enddef
 
 def SetCloseCb(file: string): func(channel): string
@@ -119,6 +126,6 @@ def FzfBF(): void
   endtry
 enddef
 
-command FzfBFD FzfBF()
+command FzfBF FzfBF()
 
 # vim: set textwidth=80 colorcolumn=80:
