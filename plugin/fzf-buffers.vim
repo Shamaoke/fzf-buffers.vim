@@ -21,7 +21,7 @@ var config = {
   },
 
   'popup_options': {
-    'title': '─::: Fzf Buffers :::─',
+    'title': '─ ::: Fzf Buffers ::: ─',
     'border': [1, 1, 1, 1],
     'borderchars': ['─', '│', '─', '│', '┌', '┐', '┘', '└']
   }
