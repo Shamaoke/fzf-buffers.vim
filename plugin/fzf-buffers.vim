@@ -4,6 +4,8 @@ vim9script
 ##                   ##
 
 var config = {
+  'fzf_default_command': $FZF_DEFAULT_COMMAND,
+
   'geometry': {
     'width': 0.8,
     'height': 0.8
@@ -109,7 +111,7 @@ def ExtendPopupOptions(options: dict<any>): dict<any>
    return options->extendnew(extensions)
 enddef
 
-def SetFzfCommand( ): string
+def SetFzfCommand( ): void
 
   var command: string
 
@@ -137,14 +139,16 @@ def SetFzfCommand( ): string
 
   command = $"echo {ListBuffers()} | column --table --separator=\\\t --output-separator=\\\t --table-right=1,4"
 
-  return command
+  $FZF_DEFAULT_COMMAND = command
 
 enddef
 
-def FzfBF(): void
-  var fzf_previous_default_command = $FZF_DEFAULT_COMMAND
+def RestoreFzfCommand(): void
+  $FZF_DEFAULT_COMMAND = config->get('fzf_default_command')
+enddef
 
-  $FZF_DEFAULT_COMMAND = SetFzfCommand()
+def FzfBF(): void
+  SetFzfCommand()
 
   try
     term_start(
@@ -159,7 +163,7 @@ def FzfBF(): void
             ->get('popup_options')
             ->ExtendPopupOptions())
   finally
-    $FZF_DEFAULT_COMMAND = fzf_previous_default_command
+    RestoreFzfCommand()
   endtry
 enddef
 
