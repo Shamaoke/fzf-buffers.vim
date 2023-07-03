@@ -147,21 +147,25 @@ def RestoreFzfCommand(): void
   $FZF_DEFAULT_COMMAND = config->get('fzf_default_command')
 enddef
 
+def Start( ): void
+  term_start(
+    config
+      ->get('term_command')
+      ->ExtendTermCommandOptions(),
+    config
+      ->get('term_options')
+      ->ExtendTermOptions())
+    ->popup_create(
+        config
+          ->get('popup_options')
+          ->ExtendPopupOptions())
+enddef
+
 def FzfBF(): void
   SetFzfCommand()
 
   try
-    term_start(
-      config
-        ->get('term_command')
-        ->ExtendTermCommandOptions(),
-      config
-        ->get('term_options')
-        ->ExtendTermOptions())
-      ->popup_create(
-          config
-            ->get('popup_options')
-            ->ExtendPopupOptions())
+    Start()
   finally
     RestoreFzfCommand()
   endtry
