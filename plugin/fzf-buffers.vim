@@ -40,18 +40,6 @@ def SetExitCb( ): func(job, number): string
 
 enddef
 
-def ExtendTermCommandOptions(options: list<string>): list<string>
-  var PreviewEmpty = () => 'echo ""'
-
-  var PreviewNonEmpty = () => 'bat --color=always --style=numbers --highlight-line={4} {3}'
-
-  var new_options = [
-    $'--preview=[[ {{3}} =~ ''\[No Name\]'' ]] && {PreviewEmpty()} || {PreviewNonEmpty()}'
-  ]
-
-  return options->extendnew(new_options)
-enddef
-
 def SetCloseCb(file: string): func(channel): string
 
   def Callback(channel: channel): string
@@ -83,6 +71,18 @@ def SetCloseCb(file: string): func(channel): string
 
   return Callback
 
+enddef
+
+def ExtendTermCommandOptions(options: list<string>): list<string>
+  var PreviewEmpty = () => 'echo ""'
+
+  var PreviewNonEmpty = () => 'bat --color=always --style=numbers --highlight-line={4} {3}'
+
+  var new_options = [
+    $'--preview=[[ {{3}} =~ ''\[No Name\]'' ]] && {PreviewEmpty()} || {PreviewNonEmpty()}'
+  ]
+
+  return options->extendnew(new_options)
 enddef
 
 def ExtendTermOptions(options: dict<any>): dict<any>
