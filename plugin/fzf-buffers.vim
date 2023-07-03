@@ -93,10 +93,12 @@ enddef
 def ExtendTermOptions(options: dict<any>): dict<any>
   var tmp_file = tempname()
 
-  return options->extendnew(
-           { 'out_name': tmp_file,
-             'exit_cb': SetExitCb(),
-             'close_cb': SetCloseCb(tmp_file) })
+  var extensions =
+    { 'out_name': tmp_file,
+      'exit_cb': SetExitCb(),
+      'close_cb': SetCloseCb(tmp_file) }
+
+  return options->extendnew(extensions)
 enddef
 
 def ExtendPopupOptions(options: dict<any>): dict<any>
