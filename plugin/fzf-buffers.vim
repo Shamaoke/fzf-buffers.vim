@@ -16,8 +16,7 @@ var config = {
 
   'term_options': {
     'hidden': true,
-    'out_io': 'file',
-    'exit_cb': (job, status) => execute('quit')
+    'out_io': 'file'
   },
 
   'popup_options': {
@@ -26,6 +25,20 @@ var config = {
     'borderchars': ['─', '│', '─', '│', '┌', '┐', '┘', '└']
   }
 }
+
+def SetExitCb( ): func(job, number): string
+
+  def Callback(job: job, status: number): string
+    var commands: list<string>
+
+    commands = ['quit']
+
+    return execute(commands)
+  enddef
+
+  return Callback
+
+enddef
 
 def ExtendCommandOptions(options: list<string>): list<string>
   var PreviewEmpty = () => 'echo ""'
@@ -77,6 +90,7 @@ def ExtendTermOptions(options: dict<any>): dict<any>
 
   return options->extendnew(
            { 'out_name': tmp_file,
+             'exit_cb': SetExitCb(),
              'close_cb': SetCloseCb(tmp_file) })
 enddef
 
