@@ -109,32 +109,42 @@ def ExtendPopupOptions(options: dict<any>): dict<any>
    return options->extendnew(extensions)
 enddef
 
-def Format(key: number, value: any): string
-  var result = [
-    value->get('bufnr'),
-    ':',
-    '\\t',
-    (value->get('bufnr') == bufnr('') ? '%' : value->get('bufnr') == bufnr('#') ? '#' : ' '),
-    '\\t',
-    (value->get('name')->fnamemodify(':.') ?? '\[No Name\]'),
-    '\\t',
-    value->get('lnum')
-  ]
+def SetFzfCommand( ): string
 
-  return result->join('')
-enddef
+  var command: string
 
-def ListBuffers(): string
-  return getbufinfo()
-           ->filter((_, v) => v->get('hidden') != 1)
-           ->map(Format)
-           ->join('\\n')
+  def Format(key: number, value: any): string
+    var result = [
+      value->get('bufnr'),
+      ':',
+      '\\t',
+      (value->get('bufnr') == bufnr('') ? '%' : value->get('bufnr') == bufnr('#') ? '#' : ' '),
+      '\\t',
+      (value->get('name')->fnamemodify(':.') ?? '\[No Name\]'),
+      '\\t',
+      value->get('lnum')
+    ]
+
+    return result->join('')
+  enddef
+
+  def ListBuffers(): string
+    return getbufinfo()
+             ->filter((_, v) => v->get('hidden') != 1)
+             ->map(Format)
+             ->join('\\n')
+  enddef
+
+  command = $"echo {ListBuffers()} | column --table --separator=\\\t --output-separator=\\\t --table-right=1,4"
+
+  return command
+
 enddef
 
 def FzfBF(): void
   var fzf_previous_default_command = $FZF_DEFAULT_COMMAND
 
-  $FZF_DEFAULT_COMMAND = $"echo {ListBuffers()} | column --table --separator=\\\t --output-separator=\\\t --table-right=1,4"
+  $FZF_DEFAULT_COMMAND = SetFzfCommand()
 
   try
     term_start(
