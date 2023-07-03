@@ -15,6 +15,7 @@ var config = {
     'fzf',
     '--no-multi',
     '--preview-window=border-left:+{4}-/2',
+    '--preview=bat --color=always --style=numbers --highlight-line={4} {3} 2>/dev/null || echo ""',
     '--ansi',
     '--delimiter=\t',
     '--tabstop=1',
@@ -81,10 +82,7 @@ def SetCloseCb(file: string): func(channel): string
 enddef
 
 def ExtendTermCommandOptions(options: list<string>): list<string>
-  var preview = 'bat --color=always --style=numbers --highlight-line={4} {3} 2>/dev/null || echo ""'
-
-  var extensions =
-    [ $'--preview={preview}' ]
+  var extensions = [ ]
 
   return options->extendnew(extensions)
 enddef
