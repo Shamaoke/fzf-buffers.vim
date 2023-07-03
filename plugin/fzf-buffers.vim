@@ -4,7 +4,7 @@ vim9script
 ##                   ##
 
 var config = {
-  'command': [
+  'term_command': [
     'fzf',
     '--no-multi',
     '--preview-window=border-left:+{4}-/2',
@@ -40,7 +40,7 @@ def SetExitCb( ): func(job, number): string
 
 enddef
 
-def ExtendCommandOptions(options: list<string>): list<string>
+def ExtendTermCommandOptions(options: list<string>): list<string>
   var PreviewEmpty = () => 'echo ""'
 
   var PreviewNonEmpty = () => 'bat --color=always --style=numbers --highlight-line={4} {3}'
@@ -130,8 +130,8 @@ def FzfBF(): void
   try
     term_start(
       config
-        ->get('command')
-        ->ExtendCommandOptions(),
+        ->get('term_command')
+        ->ExtendTermCommandOptions(),
       config
         ->get('term_options')
         ->ExtendTermOptions())
