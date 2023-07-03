@@ -85,9 +85,8 @@ def ExtendTermCommandOptions(options: list<string>): list<string>
 
   var PreviewNonEmpty = ( ) => 'bat --color=always --style=numbers --highlight-line={4} {3}'
 
-  var extensions = [
-    $'--preview=[[ {{3}} =~ ''\[No Name\]'' ]] && {PreviewEmpty()} || {PreviewNonEmpty()}'
-  ]
+  var extensions =
+    [ $'--preview=[[ {{3}} =~ ''\[No Name\]'' ]] && {PreviewEmpty()} || {PreviewNonEmpty()}' ]
 
   return options->extendnew(extensions)
 enddef
@@ -105,8 +104,8 @@ enddef
 
 def ExtendPopupOptions(options: dict<any>): dict<any>
   var extensions =
-    { minwidth:  (&columns * config['geometry']->get('width'))->ceil()->float2nr(),
-      minheight: (&lines * config['geometry']->get('height'))->ceil() ->float2nr() }
+    { 'minwidth':  (&columns * config['geometry']->get('width'))->ceil()->float2nr(),
+      'minheight': (&lines * config['geometry']->get('height'))->ceil() ->float2nr() }
 
    return options->extendnew(extensions)
 enddef
