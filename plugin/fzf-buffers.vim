@@ -83,11 +83,11 @@ def ExtendTermCommandOptions(options: list<string>): list<string>
 
   var PreviewNonEmpty = () => 'bat --color=always --style=numbers --highlight-line={4} {3}'
 
-  var new_options = [
+  var extensions = [
     $'--preview=[[ {{3}} =~ ''\[No Name\]'' ]] && {PreviewEmpty()} || {PreviewNonEmpty()}'
   ]
 
-  return options->extendnew(new_options)
+  return options->extendnew(extensions)
 enddef
 
 def ExtendTermOptions(options: dict<any>): dict<any>
