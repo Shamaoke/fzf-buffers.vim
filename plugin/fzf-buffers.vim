@@ -4,6 +4,11 @@ vim9script
 ##                   ##
 
 var config = {
+  'geometry': {
+    'width': 0.8,
+    'height': 0.8
+  },
+
   'term_command': [
     'fzf',
     '--no-multi',
@@ -95,9 +100,11 @@ def ExtendTermOptions(options: dict<any>): dict<any>
 enddef
 
 def ExtendPopupOptions(options: dict<any>): dict<any>
-   return options->extendnew(
-            { minwidth:  (&columns * 0.8)->ceil()->float2nr(),
-              minheight: (&lines * 0.8)->ceil() ->float2nr() })
+  var extensions =
+    { minwidth:  (&columns * config['geometry']->get('width'))->ceil()->float2nr(),
+      minheight: (&lines * config['geometry']->get('height'))->ceil() ->float2nr() }
+
+   return options->extendnew(extensions)
 enddef
 
 def Format(key: number, value: any): string
