@@ -132,7 +132,7 @@ def SetFzfCommand( ): void
     return result->join('')
   enddef
 
-  def ListBuffers(): string
+  def ListBuffers( ): string
     return getbufinfo()
              ->filter((_, v) => v->get('hidden') != 1)
              ->map(Format)
