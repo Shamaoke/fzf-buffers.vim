@@ -81,9 +81,9 @@ def SetCloseCb(file: string): func(channel): string
 enddef
 
 def ExtendTermCommandOptions(options: list<string>): list<string>
-  var PreviewEmpty = () => 'echo ""'
+  var PreviewEmpty = ( ) => 'echo ""'
 
-  var PreviewNonEmpty = () => 'bat --color=always --style=numbers --highlight-line={4} {3}'
+  var PreviewNonEmpty = ( ) => 'bat --color=always --style=numbers --highlight-line={4} {3}'
 
   var extensions = [
     $'--preview=[[ {{3}} =~ ''\[No Name\]'' ]] && {PreviewEmpty()} || {PreviewNonEmpty()}'
@@ -143,7 +143,7 @@ def SetFzfCommand( ): void
 
 enddef
 
-def RestoreFzfCommand(): void
+def RestoreFzfCommand( ): void
   $FZF_DEFAULT_COMMAND = config->get('fzf_default_command')
 enddef
 
@@ -161,7 +161,7 @@ def Start( ): void
           ->ExtendPopupOptions())
 enddef
 
-def FzfBF(): void
+def FzfBF( ): void
   SetFzfCommand()
 
   try
