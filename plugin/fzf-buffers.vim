@@ -81,12 +81,10 @@ def SetCloseCb(file: string): func(channel): string
 enddef
 
 def ExtendTermCommandOptions(options: list<string>): list<string>
-  var PreviewEmpty = ( ) => 'echo ""'
-
-  var PreviewNonEmpty = ( ) => 'bat --color=always --style=numbers --highlight-line={4} {3}'
+  var preview = 'bat --color=always --style=numbers --highlight-line={4} {3} 2>/dev/null || echo ""'
 
   var extensions =
-    [ $'--preview=[[ {{3}} =~ ''\[No Name\]'' ]] && {PreviewEmpty()} || {PreviewNonEmpty()}' ]
+    [ $'--preview={preview}' ]
 
   return options->extendnew(extensions)
 enddef
