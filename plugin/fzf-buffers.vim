@@ -3,43 +3,25 @@ vim9script
 # ::: Fzf Buffers ::: #
 ##                   ##
 
-def Format(key: number, value: any): string
-  var result = [
-    value->get('bufnr'),
-    ':',
-    '\\t',
-    (value->get('bufnr') == bufnr('') ? '%' : value->get('bufnr') == bufnr('#') ? '#' : ' '),
-    '\\t',
-    (value->get('name')->fnamemodify(':.') ?? '\[No Name\]'),
-    '\\t',
-    value->get('lnum')
-  ]
-
-  return result->join('')
-enddef
-
-def ListBuffers( ): string
-  return getbufinfo()
-           ->filter((_, v) => v->get('hidden') != 1)
-           ->map((_, v) =>
-               [ v->get('bufnr'),
-                 ':',
-                 '\\t',
-                 (v->get('bufnr') == bufnr('') ? '%' : v->get('bufnr') == bufnr('#') ? '#' : ' '),
-                 '\\t',
-                 (v->get('name')->fnamemodify(':.') ?? '\[No Name\]'),
-                 '\\t',
-                 v->get('lnum') ]->join('')
-             )
-           ->join('\\n')
-enddef
-
 var config = {
   'fzf_default_command': $FZF_DEFAULT_COMMAND,
 
-  'fzf_data': ( ) => $"echo {ListBuffers()}",
+  'fzf_data': ( ) =>
+    getbufinfo()
+      ->filter((_, v) => v->get('hidden') != 1)
+      ->map((_, v) =>
+          [ v->get('bufnr'),
+            ':',
+            '\\t',
+            (v->get('bufnr') == bufnr('') ? '%' : v->get('bufnr') == bufnr('#') ? '#' : ' '),
+            '\\t',
+            (v->get('name')->fnamemodify(':.') ?? '\[No Name\]'),
+            '\\t',
+            v->get('lnum') ]->join('')
+        )
+      ->join('\\n'),
 
-  'fzf_command': (data) => $"{data} | column --table --separator=\\\t --output-separator=\\\t --table-right=1,4",
+  'fzf_command': (data) => $"echo {data} | column --table --separator=\\\t --output-separator=\\\t --table-right=1,4",
 
   'tmp_file': ( ) => tempname(),
 
