@@ -21,7 +21,16 @@ enddef
 def ListBuffers( ): string
   return getbufinfo()
            ->filter((_, v) => v->get('hidden') != 1)
-           ->map(Format)
+           ->map((_, v) =>
+               [ v->get('bufnr'),
+                 ':',
+                 '\\t',
+                 (v->get('bufnr') == bufnr('') ? '%' : v->get('bufnr') == bufnr('#') ? '#' : ' '),
+                 '\\t',
+                 (v->get('name')->fnamemodify(':.') ?? '\[No Name\]'),
+                 '\\t',
+                 v->get('lnum') ]->join('')
+             )
            ->join('\\n')
 enddef
 
