@@ -3,8 +3,34 @@ vim9script
 # ::: Fzf Buffers ::: #
 ##                   ##
 
+def Format(key: number, value: any): string
+  var result = [
+    value->get('bufnr'),
+    ':',
+    '\\t',
+    (value->get('bufnr') == bufnr('') ? '%' : value->get('bufnr') == bufnr('#') ? '#' : ' '),
+    '\\t',
+    (value->get('name')->fnamemodify(':.') ?? '\[No Name\]'),
+    '\\t',
+    value->get('lnum')
+  ]
+
+  return result->join('')
+enddef
+
+def ListBuffers( ): string
+  return getbufinfo()
+           ->filter((_, v) => v->get('hidden') != 1)
+           ->map(Format)
+           ->join('\\n')
+enddef
+
 var config = {
   'fzf_default_command': $FZF_DEFAULT_COMMAND,
+
+  'fzf_data': ( ) => $"echo {ListBuffers()}",
+
+  'fzf_command': (data) => $"{data} | column --table --separator=\\\t --output-separator=\\\t --table-right=1,4",
 
   'tmp_file': ( ) => tempname(),
 
@@ -105,36 +131,8 @@ def ExtendPopupOptions(options: dict<any>): dict<any>
    return options->extendnew(extensions)
 enddef
 
-def SetFzfCommand( ): void
-
-  var command: string
-
-  def Format(key: number, value: any): string
-    var result = [
-      value->get('bufnr'),
-      ':',
-      '\\t',
-      (value->get('bufnr') == bufnr('') ? '%' : value->get('bufnr') == bufnr('#') ? '#' : ' '),
-      '\\t',
-      (value->get('name')->fnamemodify(':.') ?? '\[No Name\]'),
-      '\\t',
-      value->get('lnum')
-    ]
-
-    return result->join('')
-  enddef
-
-  def ListBuffers( ): string
-    return getbufinfo()
-             ->filter((_, v) => v->get('hidden') != 1)
-             ->map(Format)
-             ->join('\\n')
-  enddef
-
-  command = $"echo {ListBuffers()} | column --table --separator=\\\t --output-separator=\\\t --table-right=1,4"
-
-  $FZF_DEFAULT_COMMAND = command
-
+def SetFzfCommand(data: string): void
+  $FZF_DEFAULT_COMMAND = config.fzf_command(data)
 enddef
 
 def RestoreFzfCommand( ): void
@@ -156,7 +154,7 @@ def CreateFzfPopup( ): void
 enddef
 
 def Run( ): void
-  SetFzfCommand()
+  SetFzfCommand(config.fzf_data())
 
   try
     CreateFzfPopup()
