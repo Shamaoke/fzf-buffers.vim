@@ -6,6 +6,8 @@ vim9script
 var config = {
   'fzf_default_command': $FZF_DEFAULT_COMMAND,
 
+  'tmp_file': ( ) => tempname(),
+
   'geometry': {
     'width': 0.8,
     'height': 0.8
@@ -85,11 +87,11 @@ def ExtendTermCommandOptions(options: list<string>): list<string>
 enddef
 
 def ExtendTermOptions(options: dict<any>): dict<any>
-  var tmp_file = tempname()
+  var tmp_file = config.tmp_file()
 
   var extensions =
     { 'out_name': tmp_file,
-      'exit_cb': SetExitCb(),
+      'exit_cb':  SetExitCb(),
       'close_cb': SetCloseCb(tmp_file) }
 
   return options->extendnew(extensions)
