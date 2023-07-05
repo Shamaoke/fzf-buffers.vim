@@ -25,7 +25,7 @@ var spec = {
 
   'fzf_command': (data) => $"echo {data} | column --table --separator=\\\t --output-separator=\\\t --table-right=1,4",
 
-  'tmp_file': ( ) => tempname(),
+  'set_tmp_file': ( ) => tempname(),
 
   'geometry': {
     'width': 0.8,
