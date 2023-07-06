@@ -8,7 +8,7 @@ import 'fzf-run.vim' as Fzf
 var spec = {
   'fzf_default_command': $FZF_DEFAULT_COMMAND,
 
-  'fzf_data': ( ) =>
+  'set_fzf_data': ( ) =>
     getbufinfo()
       ->filter((_, v) => v->get('hidden') != 1)
       ->map((_, v) =>
@@ -23,7 +23,7 @@ var spec = {
         )
       ->join('\\n'),
 
-  'fzf_command': (data) => $"echo {data} | column --table --separator=\\\t --output-separator=\\\t --table-right=1,4",
+  'set_fzf_command': (data) => $"echo {data} | column --table --separator=\\\t --output-separator=\\\t --table-right=1,4",
 
   'set_tmp_file': ( ) => tempname(),
 
