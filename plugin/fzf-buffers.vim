@@ -48,6 +48,7 @@ var spec = {
     '--ansi',
     '--delimiter=\t',
     '--tabstop=1',
+    '--bind=alt-j:preview-down,alt-k:preview-up',
     '--expect=enter,ctrl-t,ctrl-s,ctrl-v,ctrl-d'
   ],
 
