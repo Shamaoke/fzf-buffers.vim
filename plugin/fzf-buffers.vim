@@ -36,7 +36,9 @@ var spec = {
     'enter':  (entry) => $"buffer {entry->split(':')->get(0)}",
     'ctrl-t': (entry) => $"tab sbuffer {entry->split(':')->get(0)}",
     'ctrl-s': (entry) => $"sbuffer {entry->split(':')->get(0)}",
-    'ctrl-v': (entry) => $"vertical sbuffer {entry->split(':')->get(0)}"
+    'ctrl-v': (entry) => $"vertical sbuffer {entry->split(':')->get(0)}",
+    'ctrl-d': (entry) => $":{entry->split(':')->get(0)}bwipeout"
+
   },
 
   'term_command': [
@@ -47,7 +49,7 @@ var spec = {
     '--ansi',
     '--delimiter=\t',
     '--tabstop=1',
-    '--expect=enter,ctrl-t,ctrl-s,ctrl-v'
+    '--expect=enter,ctrl-t,ctrl-s,ctrl-v,ctrl-d'
   ],
 
   'term_options': {
