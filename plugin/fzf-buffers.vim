@@ -10,7 +10,7 @@ var spec = {
 
   'set_fzf_data': ( ) =>
     getbufinfo()
-      ->filter((_, v) => v->get('hidden') != 1)
+      ->filter((_, v) => v->get('hidden') != 1 && v->get('listed') != 0)
       ->map((_, v) =>
           [ v->get('bufnr'),
             ':',
@@ -37,8 +37,7 @@ var spec = {
     'ctrl-t': (entry) => $"tab sbuffer {entry->split(':')->get(0)}",
     'ctrl-s': (entry) => $"sbuffer {entry->split(':')->get(0)}",
     'ctrl-v': (entry) => $"vertical sbuffer {entry->split(':')->get(0)}",
-    'ctrl-d': (entry) => $":{entry->split(':')->get(0)}bwipeout"
-
+    'ctrl-d': (entry) => $"bdelete {entry->split(':')->get(0)}"
   },
 
   'term_command': [
