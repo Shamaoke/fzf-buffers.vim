@@ -6,26 +6,23 @@ vim9script
 import 'fzf-run.vim' as Fzf
 
 var spec = {
-  'fzf_default_command': $FZF_DEFAULT_COMMAND,
-
-  'set_fzf_data': ( ) =>
+  'set_fzf_data': (data) =>
     getbufinfo()
       ->filter((_, v) => v->get('hidden') != 1 && v->get('listed') != 0)
       ->map((_, v) =>
           [ v->get('bufnr'),
             ':',
-            '\\t',
+            "\t",
             (v->get('bufnr') == bufnr('') ? '%' : v->get('bufnr') == bufnr('#') ? '#' : ' '),
-            '\\t',
-            (v->get('name')->fnamemodify(':.') ?? '\[No Name\]'),
-            '\\t',
+            "\t",
+            (v->get('name')->fnamemodify(':.') ?? '[No Name]'),
+            "\t",
             v->get('lnum') ]->join('')
         )
-      ->join('\\n'),
-
-  'set_fzf_command': (data) => $"echo {data} | column --table --separator=\\\t --output-separator=\\\t --table-right=1,4",
+      ->writefile(data),
 
   'set_tmp_file': ( ) => tempname(),
+  'set_tmp_data': ( ) => tempname(),
 
   'geometry': {
     'width': 0.8,
@@ -48,11 +45,12 @@ var spec = {
     '--ansi',
     '--delimiter=\t',
     '--tabstop=1',
-    '--bind=alt-j:preview-down,alt-k:preview-up',
+    '--bind=alt-j:preview-down,alt-k:preview-up,alt-p:toggle-preview',
     '--expect=enter,ctrl-t,ctrl-s,ctrl-v,ctrl-d'
   ],
 
-  'set_term_command_options': ( ) => [ ],
+  'set_term_command_options': (data) =>
+    [ $"--bind=start:reload^cat '{data}' | column --table --separator='\t' --output-separator='\t' --table-right=1,4^" ],
 
   'term_options': {
     'hidden': true,
